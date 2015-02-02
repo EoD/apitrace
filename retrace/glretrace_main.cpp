@@ -47,6 +47,9 @@
 
 #define APITRACE_MARKER_ID 0xA3ACE001U
 
+/* TODO remove */
+std::map<unsigned int,std::string> dx9_shader_replacement;
+
 namespace glretrace {
 
 glprofile::Profile defaultProfile(glprofile::API_GL, 1, 0);
