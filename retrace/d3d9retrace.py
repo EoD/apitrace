@@ -167,6 +167,9 @@ class D3DRetracer(Retracer):
             if interface.name.startswith('IDirect3DSwapChain9'):
                 print r'    d3d9scDumper.bindDevice(_this);'
             print r'    retrace::frameComplete(call);'
+            print r'    if (retrace::profiling) {'
+            print r'    retrace::profiler.addFrameEnd();'
+            print r'    }'
             print r'    hDestWindowOverride = NULL;'
 
         # Ensure textures can be locked when dumping
@@ -192,8 +195,15 @@ class D3DRetracer(Retracer):
                 if flag.endswith('_DONOTWAIT'):
                     print r'    Flags &= ~%s;' % flag
 
+        if method.name.startswith("Draw"):
+            print r'    if (retrace::profiling) {'
+            print r'        d3dretrace::beginProfileDX9(call, true);'
+            print r'    }'
         Retracer.invokeInterfaceMethod(self, interface, method)
-
+        if method.name.startswith("Draw"):
+            print r'    if (retrace::profiling) {'
+            print r'        d3dretrace::endProfileDX9(call, true);'
+            print r'    }'
         if method.name in self.createDeviceMethodNames:
             print r'    if (FAILED(_result)) {'
             print r'        exit(1);'
@@ -256,8 +266,8 @@ def main():
             api.addModule(d3d9)
             api.addModule(dxva2)
             print
-            print '''static d3dretrace::D3DDumper<IDirect3DDevice9> d3d9Dumper;'''
-            print '''static d3dretrace::D3DDumper<IDirect3DSwapChain9> d3d9scDumper;'''
+            print '''d3dretrace::D3DDumper<IDirect3DDevice9> d3d9Dumper;'''
+            print '''d3dretrace::D3DDumper<IDirect3DSwapChain9> d3d9scDumper;'''
             print
         elif moduleName == 'd3d8':
             from specs.d3d8 import d3d8
