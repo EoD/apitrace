@@ -69,6 +69,8 @@ private slots:
     void loadProgess(int percent);
     void finishedLoadingTrace();
     void lookupState();
+    void setshaderReplacement();
+    void removeShaderReplacement();
     void showThumbnails();
     void trim();
     void showSettings();
@@ -173,4 +175,6 @@ private:
 
     ProfileDialog* m_profileDialog;
     QString m_androidFilePath;
+
+    QMap<unsigned int,QString> m_shader_replacements;
 };

@@ -173,7 +173,7 @@ ApiTraceState ApiTrace::defaultState() const
     return *firstCall->state();
 }
 
-void ApiTrace::callEdited(ApiTraceCall *call)
+void ApiTrace::callEdited(ApiTraceCall *call, bool save)
 {
     if (!m_editedCalls.contains(call)) {
         // Lets generate a temp filename
@@ -184,9 +184,13 @@ void ApiTrace::callEdited(ApiTraceCall *call)
         m_tempFileName += fileInfo.fileName();
         m_tempFileName += QString::fromLatin1(".edited");
     }
-    m_editedCalls.insert(call);
-    m_needsSaving = true;
-
+    if ( save )
+    {
+        m_editedCalls.insert(call);
+        m_needsSaving = true;
+    }else{
+        m_needsSaving = false;
+    }
     emit changed(call);
 }
 
