@@ -289,7 +289,8 @@ public:
     void setBacktrace(QString backtrace);
 
     void missingThumbnail();
-
+    void setShaderReplaced(bool bReplaced);
+    bool getShaderReplaced();
 private:
     void loadData(TraceLoader *loader,
                   const trace::Call *tcall);
@@ -312,6 +313,8 @@ private:
 
     mutable QString m_richText;
     mutable QString m_searchText;
+    
+    bool m_isShaderReplaced;
 };
 Q_DECLARE_METATYPE(ApiTraceCall*);
 
