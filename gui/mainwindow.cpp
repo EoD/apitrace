@@ -1372,7 +1372,7 @@ void MainWindow::customContextMenuRequested(QPoint pos)
     std::cout << m_api << std::endl;
     if (m_api == trace::API_DX && event->type() == ApiTraceEvent::Call )
     {
-        ApiTraceCall * call = dynamic_cast<ApiTraceCall*>(event);
+        ApiTraceCall * call = static_cast<ApiTraceCall*>(event);
         std::cout << call->name().toStdString() << std::endl;
         if ( call->name().endsWith("CreatePixelShader") || call->name().endsWith("CreateVertexShader" ) )
         {
@@ -1394,12 +1394,12 @@ void MainWindow::setshaderReplacement()
         if ( f.exists() )
         {
 
-            ApiTraceCall * call = dynamic_cast<ApiTraceCall*>(m_selectedEvent);
+            ApiTraceCall * call = static_cast<ApiTraceCall*>(m_selectedEvent);
             m_shader_replacements.insert(call->index(),fileChoosen);
             call->setShaderReplaced(true);
             m_model->callChanged(call);
         }else {
-            ApiTraceCall * call = dynamic_cast<ApiTraceCall*>(m_selectedEvent);
+            ApiTraceCall * call = static_cast<ApiTraceCall*>(m_selectedEvent);
             call->setShaderReplaced(false);
             m_shader_replacements.remove(call->index());
             m_model->callChanged(call);
@@ -1411,7 +1411,7 @@ void MainWindow::removeShaderReplacement()
 {
     if (m_selectedEvent)
     {
-        ApiTraceCall * call = dynamic_cast<ApiTraceCall*>(m_selectedEvent);
+        ApiTraceCall * call = static_cast<ApiTraceCall*>(m_selectedEvent);
         call->setShaderReplaced(false);
         m_model->callChanged(call);
         m_shader_replacements.remove(call->index());
